@@ -1,12 +1,14 @@
 var express = require('express');
 var router = express.Router();
+const User = require('../models/User');
 
-/* GET home page. */
 router.get('/', async function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/registration', async (req, res) => {
+router.post('/registration', async (req, res) => {
+  console.log(req.body);
+  await User.create(req.body);
   res.json({ response: 'ok' });
 });
 
