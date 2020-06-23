@@ -8,9 +8,12 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/registration', async (req, res) => {
-  console.log(req.body);
-  await User.create(req.body);
-  res.json({ response: 'ok' });
+  try {
+    const user = await User.create(req.body);
+    res.json(user);
+  } catch (err) {
+    res.status(500).json(err); // todo
+  }
 });
 
 module.exports = router;

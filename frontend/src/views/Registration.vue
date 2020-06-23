@@ -2,7 +2,7 @@
   <b-form @submit.prevent="register" @reset.prevent="reset">
     <h1>Registration</h1>
     <b-form-group label="Name">
-      <b-form-input type="text"/>
+      <b-form-input type="text" v-model="user.nickname"/>
       <b-alert show variant="danger">
         Name is required
       </b-alert>
@@ -12,7 +12,7 @@
     </b-form-group>
 
     <b-form-group label="Email">
-      <b-form-input type="email"/>
+      <b-form-input type="email" v-model="user.email"/>
       <b-alert show variant="danger">
         Email is required
       </b-alert>
@@ -22,7 +22,7 @@
     </b-form-group>
 
     <b-form-group label="Password">
-      <b-form-input type="password"/>
+      <b-form-input type="password" v-model="user.password"/>
       <b-alert show variant="danger">
         Password is required
       </b-alert>
@@ -32,7 +32,7 @@
     </b-form-group>
 
     <b-form-group label="Repeat password">
-      <b-form-input type="password" />
+      <b-form-input type="password" v-model="repeatPassword"/>
       <b-alert show variant="danger">
         Repeat password is required
       </b-alert>
@@ -42,7 +42,7 @@
     </b-form-group>
 
     <b-form-group label="Introduction">
-      <b-form-textarea rows="4" col="21"/>
+      <b-form-textarea rows="4" col="21" v-model="user.introduction"/>
     </b-form-group>
 
     <b-button variant="success" type="submit">Register</b-button>
@@ -51,12 +51,23 @@
 </template>
 
 <script>
+import axios from 'axios';
 import UserDto from '../dtos/UserDto';
 
 export default {
   name: 'Registration',
   data: () => ({
     user: new UserDto(),
+    repeatPassword: '',
   }),
+  methods: {
+    async register() {
+      try {
+        await axios.post('http://fullstack.braininghub.com:4040/registration', this.user);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
 };
 </script>
