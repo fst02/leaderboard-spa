@@ -3,40 +3,40 @@
     <h1>Registration</h1>
     <b-form-group label="Name">
       <b-form-input type="text" v-model="user.nickname"/>
-      <b-alert show variant="danger">
+      <b-alert show variant="danger" v-if="!$v.user.nickname.required">
         Name is required
       </b-alert>
-      <b-alert show variant="danger">
+      <b-alert show variant="danger" v-if="!$v.user.nickname.minLength">
         Name should be at least 3 characters long
       </b-alert>
     </b-form-group>
 
     <b-form-group label="Email">
       <b-form-input type="email" v-model="user.email"/>
-      <b-alert show variant="danger">
+      <b-alert show variant="danger" v-if="!$v.user.email.required" >
         Email is required
       </b-alert>
-      <b-alert show variant="danger">
+      <b-alert show variant="danger" v-if="!$v.user.email.email">
         Email should be valid
       </b-alert>
     </b-form-group>
 
     <b-form-group label="Password">
       <b-form-input type="password" v-model="user.password"/>
-      <b-alert show variant="danger">
+      <b-alert show variant="danger" v-if="!$v.user.password.required">
         Password is required
       </b-alert>
-      <b-alert show variant="danger">
+      <b-alert show variant="danger" v-if="!$v.user.password.minLength">
         Password should be at least 6 characters long
       </b-alert>
     </b-form-group>
 
     <b-form-group label="Repeat password">
       <b-form-input type="password" v-model="repeatPassword"/>
-      <b-alert show variant="danger">
+      <b-alert show variant="danger" v-if="!$v.repeatPassword.required">
         Repeat password is required
       </b-alert>
-      <b-alert show variant="danger">
+      <b-alert show variant="danger" v-if="!$v.repeatPassword.sameAsPassword">
         Should be same as password
       </b-alert>
     </b-form-group>
@@ -52,6 +52,12 @@
 
 <script>
 import axios from 'axios';
+import {
+  required,
+  minLength,
+  email,
+  sameAs,
+} from 'vuelidate/lib/validators';
 import UserDto from '../dtos/UserDto';
 
 export default {
@@ -60,8 +66,22 @@ export default {
     user: new UserDto(),
     repeatPassword: '',
   }),
+  validations: {
+    user: {
+      nickname: { required, minLength: minLength(3) },
+      email: { required, email },
+      password: { required, minLength: minLength(6) },
+    },
+    repeatPassword: {
+      required,
+      sameAsPassword: sameAs(function getPassword() { return this.user.password; }),
+    },
+  },
   methods: {
     async register() {
+      if (this.$v.$invalid) {
+        return;
+      }
       try {
         await axios.post('http://fullstack.braininghub.com:4040/registration', this.user);
       } catch (err) {
