@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <NavigationComponent />
-    </div>
-    <router-view/>
+    <NavigationComponent />
+    <b-container>
+      <router-view />
+    </b-container>
   </div>
 </template>
 
