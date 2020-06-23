@@ -1,8 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+
+const router = express.Router();
 const User = require('../models/User');
 
-router.get('/', async function(req, res, next) {
+router.get('/', async (req, res) => {
   res.render('index', { title: 'Express' });
 });
 
@@ -11,6 +12,5 @@ router.post('/registration', async (req, res) => {
   await User.create(req.body);
   res.json({ response: 'ok' });
 });
-
 
 module.exports = router;
