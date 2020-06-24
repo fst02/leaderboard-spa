@@ -1,8 +1,12 @@
 <template>
   <b-form @submit.prevent="register" @reset.prevent="reset">
     <h1>Registration</h1>
-    <b-form-group label="Name">
+    <b-alert show variant="danger" v-if="error">{{error.message}}</b-alert>
+    <b-form-group label="Nickname">
       <b-form-input type="text" v-model="user.nickname" @input="$v.user.nickname.$touch()" />
+      <b-alert show variant="danger" v-if="getFieldBackendError('nickname')">
+        {{getFieldBackendError('nickname').message}}
+      </b-alert>
       <div v-if="$v.user.nickname.$dirty">
         <b-alert show variant="danger" v-if="!$v.user.nickname.required">
           Name is required
@@ -15,6 +19,9 @@
 
     <b-form-group label="Email">
       <b-form-input type="email" v-model="user.email" @input="$v.user.email.$touch()" />
+      <b-alert show variant="danger" v-if="getFieldBackendError('email')">
+        {{getFieldBackendError('email').message}}
+      </b-alert>
       <div v-if="$v.user.email.$dirty">
         <b-alert show variant="danger" v-if="!$v.user.email.required" >
           Email is required
@@ -27,6 +34,9 @@
 
     <b-form-group label="Password">
       <b-form-input type="password" v-model="user.password" @input="$v.user.password.$touch()" />
+      <b-alert show variant="danger" v-if="getFieldBackendError('password')">
+        {{getFieldBackendError('password').message}}
+      </b-alert>
       <div v-if="$v.user.password.$dirty">
         <b-alert show variant="danger" v-if="!$v.user.password.required">
           Password is required
@@ -49,20 +59,21 @@
       </div>
     </b-form-group>
 
-    <b-form-group label="Image upload">
+    <b-form-group label="Image upload (optional)">
       <b-form-file
         v-model="file"
-        :state="Boolean(file)"
+        accept="image/*"
         placeholder="Choose a file or drop it here..."
         drop-placeholder="Drop file here..."
       />
+      <b-form-text>Maximum file size: 2 MB</b-form-text>
     </b-form-group>
 
-    <b-form-group label="Introduction">
+    <b-form-group label="Introduction (optional)">
       <b-form-textarea rows="4" col="21" v-model="user.introduction"/>
     </b-form-group>
 
-    <b-button variant="success" type="submit">Register</b-button>
+    <b-button variant="success" type="submit" class="mr-2">Register</b-button>
     <b-button variant="danger" type="reset">Reset</b-button>
   </b-form>
 </template>
@@ -83,6 +94,7 @@ export default {
     user: new UserDto(),
     repeatPassword: '',
     file: null,
+    error: null,
   }),
   validations: {
     user: {
@@ -96,6 +108,9 @@ export default {
     },
   },
   methods: {
+    getFieldBackendError(field) {
+      return this.error?.errors?.find((error) => error.path === field);
+    },
     async register() {
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -115,7 +130,8 @@ export default {
           },
         );
       } catch (err) {
-        console.log(err);
+        console.log(err.response.data.errors);
+        this.error = err.response.data;
       }
     },
   },

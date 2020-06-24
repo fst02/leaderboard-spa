@@ -6,6 +6,7 @@ const path = require('path');
 
 const upload = multer({
   dest: 'public/images',
+  limits: { fileSize: 2 * 1024 * 1024 },
 });
 
 const router = express.Router();
@@ -28,7 +29,8 @@ router.post('/registration', upload.single('file'), async (req, res) => {
     const user = await User.create(userData);
     res.json(user);
   } catch (err) {
-    res.status(500).json(err); // todo
+    console.log(err);
+    res.status(500).json({ message: err.message, errors: err.errors }); // todo
   }
 });
 
