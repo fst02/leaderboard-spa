@@ -49,6 +49,15 @@
       </div>
     </b-form-group>
 
+    <b-form-group label="Image upload">
+      <b-form-file
+        v-model="file"
+        :state="Boolean(file)"
+        placeholder="Choose a file or drop it here..."
+        drop-placeholder="Drop file here..."
+      />
+    </b-form-group>
+
     <b-form-group label="Introduction">
       <b-form-textarea rows="4" col="21" v-model="user.introduction"/>
     </b-form-group>
@@ -73,6 +82,7 @@ export default {
   data: () => ({
     user: new UserDto(),
     repeatPassword: '',
+    file: null,
   }),
   validations: {
     user: {
@@ -91,8 +101,19 @@ export default {
       if (this.$v.$invalid) {
         return;
       }
+      const formData = new FormData();
+      formData.append('file', this.file);
+      formData.append('user', JSON.stringify(this.user));
       try {
-        await axios.post('http://fullstack.braininghub.com:4040/registration', this.user);
+        await axios.post(
+          'http://fullstack.braininghub.com:4040/registration',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
       } catch (err) {
         console.log(err);
       }
