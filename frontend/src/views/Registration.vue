@@ -2,43 +2,51 @@
   <b-form @submit.prevent="register" @reset.prevent="reset">
     <h1>Registration</h1>
     <b-form-group label="Name">
-      <b-form-input type="text" v-model="user.nickname"/>
-      <b-alert show variant="danger" v-if="!$v.user.nickname.required">
-        Name is required
-      </b-alert>
-      <b-alert show variant="danger" v-if="!$v.user.nickname.minLength">
-        Name should be at least 3 characters long
-      </b-alert>
+      <b-form-input type="text" v-model="user.nickname" @input="$v.user.nickname.$touch()" />
+      <div v-if="$v.user.nickname.$dirty">
+        <b-alert show variant="danger" v-if="!$v.user.nickname.required">
+          Name is required
+        </b-alert>
+        <b-alert show variant="danger" v-if="!$v.user.nickname.minLength">
+          Name should be at least 3 characters long
+        </b-alert>
+      </div>
     </b-form-group>
 
     <b-form-group label="Email">
-      <b-form-input type="email" v-model="user.email"/>
-      <b-alert show variant="danger" v-if="!$v.user.email.required" >
-        Email is required
-      </b-alert>
-      <b-alert show variant="danger" v-if="!$v.user.email.email">
-        Email should be valid
-      </b-alert>
+      <b-form-input type="email" v-model="user.email" @input="$v.user.email.$touch()" />
+      <div v-if="$v.user.email.$dirty">
+        <b-alert show variant="danger" v-if="!$v.user.email.required" >
+          Email is required
+        </b-alert>
+        <b-alert show variant="danger" v-if="!$v.user.email.email">
+          Email should be valid
+        </b-alert>
+      </div>
     </b-form-group>
 
     <b-form-group label="Password">
-      <b-form-input type="password" v-model="user.password"/>
-      <b-alert show variant="danger" v-if="!$v.user.password.required">
-        Password is required
-      </b-alert>
-      <b-alert show variant="danger" v-if="!$v.user.password.minLength">
-        Password should be at least 6 characters long
-      </b-alert>
+      <b-form-input type="password" v-model="user.password" @input="$v.user.password.$touch()" />
+      <div v-if="$v.user.password.$dirty">
+        <b-alert show variant="danger" v-if="!$v.user.password.required">
+          Password is required
+        </b-alert>
+        <b-alert show variant="danger" v-if="!$v.user.password.minLength">
+          Password should be at least 6 characters long
+        </b-alert>
+      </div>
     </b-form-group>
 
     <b-form-group label="Repeat password">
-      <b-form-input type="password" v-model="repeatPassword"/>
-      <b-alert show variant="danger" v-if="!$v.repeatPassword.required">
-        Repeat password is required
-      </b-alert>
-      <b-alert show variant="danger" v-if="!$v.repeatPassword.sameAsPassword">
-        Should be same as password
-      </b-alert>
+      <b-form-input type="password" v-model="repeatPassword" @input="$v.repeatPassword.$touch()" />
+      <div v-if="$v.repeatPassword.$dirty">
+        <b-alert show variant="danger" v-if="!$v.repeatPassword.required">
+          Repeat password is required
+        </b-alert>
+        <b-alert show variant="danger" v-if="!$v.repeatPassword.sameAsPassword">
+          Should be same as password
+        </b-alert>
+      </div>
     </b-form-group>
 
     <b-form-group label="Introduction">
@@ -79,6 +87,7 @@ export default {
   },
   methods: {
     async register() {
+      this.$v.$touch();
       if (this.$v.$invalid) {
         return;
       }
