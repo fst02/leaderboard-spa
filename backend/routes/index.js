@@ -16,4 +16,6 @@ router.get('/', async (req, res) => {
 
 router.post('/registration', upload.single('file'), RegistrationController.register);
 
+router.get('/registration/verify', RegistrationController.verify);
+
 module.exports = router;
