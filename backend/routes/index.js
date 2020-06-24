@@ -1,8 +1,7 @@
 const express = require('express');
 const multer = require('multer');
-const readChunk = require('read-chunk');
-const imageType = require('image-type');
-const path = require('path');
+
+const RegistrationController = require('../controllers/RegistrationController');
 
 const upload = multer({
   dest: 'public/images',
@@ -10,28 +9,11 @@ const upload = multer({
 });
 
 const router = express.Router();
-const User = require('../models/User');
 
 router.get('/', async (req, res) => {
   res.render('index', { title: 'Express' });
 });
 
-router.post('/registration', upload.single('file'), async (req, res) => {
-  try {
-    let filename = null;
-    if (req.file) {
-      const buffer = readChunk.sync(path.join(__dirname, `../public/images/${req.file.filename}`), 0, 12);
-      if (imageType(buffer).mime.includes('image')) {
-        filename = req.file.filename;
-      }
-    }
-    const userData = Object.assign(JSON.parse(req.body.user), { avatar: filename });
-    const user = await User.create(userData);
-    res.json(user);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: err.message, errors: err.errors }); // todo
-  }
-});
+router.post('/registration', upload.single('file'), RegistrationController.register);
 
 module.exports = router;
