@@ -6,7 +6,7 @@ const cryptoRandomString = require('crypto-random-string');
 
 const UserActivation = require('../models/UserActivation');
 const MailerService = require('../services/MailerService');
-const ValidationService = require('../services/ValidationService');
+const AuthService = require('../services/AuthService');
 
 const User = require('../models/User');
 
@@ -49,12 +49,16 @@ module.exports = {
   verify: async (req, res) => {
     try {
       const currentDate = new Date();
-      const result = await ValidationService.select(req.query.token);
+      const result = await AuthService.select(req.query.token);
       if (result.length !== 0 && result[0].expiredAt >= currentDate) {
-        ValidationService.setToVerified(result[0].userId);
         const user = await User.findOne({
           where: { id: result[0].userId },
         });
+        if (user.isVerified) {
+          throw new Error('Account is already verified');
+        }
+        user.isVerified = true;
+        user.save();
         res.json(user);
       } else {
         throw new Error('Invalid or expired token');
