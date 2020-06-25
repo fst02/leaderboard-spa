@@ -73,7 +73,7 @@
             />
           </b-col>
           <b-col cols="2" class="text-right">
-            <b-button @click="file = null">Delete</b-button>
+            <b-button variant="outline-danger" @click="file = null">Delete</b-button>
           </b-col>
         </b-form-row>
         <b-form-text>Maximum file size: 2 MB</b-form-text>
@@ -82,9 +82,10 @@
       <b-form-group label="Introduction (optional)">
         <b-form-textarea rows="4" col="21" v-model="user.introduction"/>
       </b-form-group>
-
-      <b-button variant="success" type="submit" class="mr-2">Register</b-button>
-      <b-button variant="danger" type="reset">Reset</b-button>
+      <div class="text-right">
+        <b-button variant="outline-success" type="submit" class="mr-2">Register</b-button>
+        <b-button variant="outline-danger" type="reset">Reset</b-button>
+      </div>
     </b-form>
   </div>
 </template>
