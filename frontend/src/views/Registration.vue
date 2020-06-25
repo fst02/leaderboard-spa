@@ -129,6 +129,7 @@ export default {
             },
           },
         );
+        this.$router.push('/signin');
       } catch (err) {
         this.error = err.response.data;
       }
