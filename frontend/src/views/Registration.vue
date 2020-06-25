@@ -111,6 +111,13 @@ export default {
     getFieldBackendError(field) {
       return this.error?.errors?.find((error) => error.path === field);
     },
+    reset() {
+      this.user = new UserDto();
+      this.error = null;
+      this.repeatPassword = '';
+      this.file = null;
+      this.$v.$reset();
+    },
     async register() {
       this.$v.$touch();
       if (this.$v.$invalid) {
