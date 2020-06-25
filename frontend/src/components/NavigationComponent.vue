@@ -9,10 +9,10 @@
     </b-navbar-toggle>
     <b-collapse id="navbar-toggle-collapse" is-nav>
       <b-navbar-nav class="ml-auto">
-        <b-nav-item to="/">TopScores</b-nav-item>
+        <b-nav-item to="/">Top Scores</b-nav-item>
         <b-nav-item to="/registration">Sign Up</b-nav-item>
         <b-nav-item to="/signin">Sign In</b-nav-item>
-        <b-nav-item to="/about">Profile</b-nav-item>
+        <b-nav-item to="/profile">Profile</b-nav-item>
         <b-nav-item>Sign Out</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
