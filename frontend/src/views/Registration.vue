@@ -130,7 +130,6 @@ export default {
           },
         );
       } catch (err) {
-        console.log(err.response.data.errors);
         this.error = err.response.data;
       }
     },

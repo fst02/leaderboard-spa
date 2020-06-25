@@ -23,7 +23,7 @@ export default {
       if (this.$store.state.auth.error) {
         this.error = this.$store.state.auth.error;
       } else {
-        this.$router.push('/login');
+        this.$router.push('/signin');
       }
     },
   },

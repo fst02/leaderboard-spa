@@ -60,7 +60,6 @@ module.exports = {
         throw new Error('Invalid or expired token');
       }
     } catch (err) {
-      console.log(`verify error: ${err}`);
       res.status(500).json({ message: err.message, errors: err.errors });
     }
   },

@@ -28,7 +28,6 @@ export default {
   },
   actions: {
     async verify(context, token) {
-      console.log(token);
       try {
         const result = await http(context).get(
           `/registration/verify?token=${token}`,
@@ -36,7 +35,6 @@ export default {
         context.commit('setUser', result);
       } catch (err) {
         context.commit('setError', err.response?.data || err);
-        console.log(err);
       }
     },
   },
