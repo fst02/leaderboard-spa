@@ -52,13 +52,16 @@ module.exports = {
       const result = await ValidationService.select(req.query.token);
       if (result.length !== 0 && result[0].expiredAt >= currentDate) {
         ValidationService.setToVerified(result[0].userId);
+        const user = await User.findOne({
+          where: { id: result[0].userId },
+        });
+        res.json(user);
+      } else {
+        throw new Error('Invalid or expired token');
       }
-      const user = await User.findOne({
-        where: { id: result[0].userId },
-      });
-      res.json(user);
     } catch (err) {
       console.log(`verify error: ${err}`);
+      res.status(500).json({ message: err.message, errors: err.errors });
     }
   },
 };
