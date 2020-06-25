@@ -60,12 +60,19 @@
     </b-form-group>
 
     <b-form-group label="Image upload (optional)">
-      <b-form-file
-        v-model="file"
-        accept="image/*"
-        placeholder="Choose a file or drop it here..."
-        drop-placeholder="Drop file here..."
-      />
+      <b-form-row>
+        <b-col cols="10">
+          <b-form-file
+            v-model="file"
+            accept="image/*"
+            placeholder="Choose a file or drop it here..."
+            drop-placeholder="Drop file here..."
+          />
+        </b-col>
+        <b-col cols="2" class="text-right">
+          <b-button @click="file = null">Delete</b-button>
+        </b-col>
+      </b-form-row>
       <b-form-text>Maximum file size: 2 MB</b-form-text>
     </b-form-group>
 
