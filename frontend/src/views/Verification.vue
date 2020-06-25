@@ -1,9 +1,9 @@
 <template>
   <div>
-    <b-alert class="mt-3" show variant="success" v-if="!error">
+    <b-alert class="mt-3 text-center" show variant="success" v-if="!error">
       Verification in progress, please wait
     </b-alert>
-    <b-alert class="mt-3" show variant="danger" v-if="error">{{error.message}}</b-alert>
+    <b-alert class="mt-3 text-center" show variant="danger" v-if="error">{{error.message}}</b-alert>
   </div>
 </template>
 

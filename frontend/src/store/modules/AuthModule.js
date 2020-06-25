@@ -22,7 +22,7 @@ export default {
       state.error = null;
     },
     setUser(state, payload) {
-      state.user = payload.user;
+      state.user = payload;
       state.error = null;
     },
   },
@@ -32,7 +32,8 @@ export default {
         const result = await http(context).get(
           `/registration/verify?token=${token}`,
         );
-        context.commit('setUser', result);
+        console.log(result);
+        context.commit('setUser', result.data);
       } catch (err) {
         context.commit('setError', err.response?.data || err);
       }

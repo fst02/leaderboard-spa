@@ -1,17 +1,22 @@
 <template>
   <div>
-    <b-alert show variant="success" class="mt-3" v-if="justVerified">
-      Successfully verified your email address
+    <b-alert show variant="success" class="mt-3 text-center" v-if="justVerified">
+      Welcome @{{nickname}}, you have successfully verified your email address.
     </b-alert>
-    <b-alert show variant="success" class="mt-3" v-if="justRegistered">
-      Successfully registered. Please check your email to verify
+    <b-alert show variant="success" class="mt-3 text-center" v-if="justRegistered">
+      Successfully registered. Please check your email to verify.
     </b-alert>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'SignIn',
+  computed: mapState({
+    nickname: (state) => state.auth.user.nickname,
+  }),
   data: () => ({
     justVerified: false,
     justRegistered: false,

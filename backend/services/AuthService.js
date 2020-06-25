@@ -1,5 +1,4 @@
 const UserActivation = require('../models/UserActivation');
-const User = require('../models/User');
 
 const select = async (token) => {
   const results = await UserActivation.findAll({
@@ -16,14 +15,6 @@ const select = async (token) => {
   return exportData;
 };
 
-const setToVerified = async (userId) => {
-  await User.update(
-    { isVerified: true },
-    { where: { id: userId } },
-  );
-};
-
 module.exports = {
   select,
-  setToVerified,
 };
