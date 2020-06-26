@@ -18,7 +18,6 @@
           </b-alert>
         </div>
       </b-form-group>
-
       <b-form-group label="Email">
         <b-form-input type="email" v-model="user.email" @input="$v.user.email.$touch()" />
         <b-alert show variant="danger" v-if="getFieldBackendError('email')">

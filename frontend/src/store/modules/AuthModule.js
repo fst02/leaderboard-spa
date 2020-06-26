@@ -37,5 +37,14 @@ export default {
         context.commit('setError', err.response?.data || err);
       }
     },
+    async login(context, user) {
+      context.commit('deleteSessionData');
+      try {
+        const result = await http(context).post('/signin', user);
+        context.commit('setSessionData', result.data);
+      } catch (err) {
+        context.commit('setError', err.response?.data || err);
+      }
+    },
   },
 };

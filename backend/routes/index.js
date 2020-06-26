@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 
 const RegistrationController = require('../controllers/RegistrationController');
+const SignInController = require('../controllers/SignInController');
 
 const upload = multer({
   dest: 'public/images',
@@ -15,6 +16,8 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/registration', upload.single('file'), RegistrationController.register);
+
+router.post('/signin', SignInController.signIn);
 
 router.get('/registration/verify', RegistrationController.verify);
 
