@@ -46,5 +46,8 @@ export default {
         context.commit('setError', err.response?.data || err);
       }
     },
+    logout(context) {
+      context.commit('deleteSessionData');
+    },
   },
 };
