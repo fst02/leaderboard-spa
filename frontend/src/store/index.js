@@ -12,12 +12,6 @@ const persistence = new VuexPersistence({
 });
 
 export default new Vuex.Store({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
   modules: {
     auth: AuthModule,
   },
