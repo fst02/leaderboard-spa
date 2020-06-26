@@ -32,7 +32,6 @@ export default {
         const result = await http(context).get(
           `/registration/verify?token=${token}`,
         );
-        console.log(result);
         context.commit('setUser', result.data);
       } catch (err) {
         context.commit('setError', err.response?.data || err);

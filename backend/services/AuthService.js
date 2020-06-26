@@ -1,18 +1,10 @@
 const UserActivation = require('../models/UserActivation');
 
 const select = async (token) => {
-  const results = await UserActivation.findAll({
+  const result = await UserActivation.findOne({
     where: { token },
   });
-  const exportData = [];
-  results.forEach((result) => {
-    exportData.push({
-      userId: result.userId,
-      token: result.token,
-      expiredAt: result.expiredAt,
-    });
-  });
-  return exportData;
+  return result;
 };
 
 module.exports = {

@@ -26,7 +26,7 @@ export default {
       if (from.path === '/registration/verify') {
         vm.justVerified = true; //eslint-disable-line
       }
-      if (from.path === '/registration') {
+      if (from.path === '/registration' && to.query.success) {
         vm.justRegistered = true; //eslint-disable-line
       }
     });

@@ -73,9 +73,12 @@
             />
           </b-col>
           <b-col cols="2" class="text-right">
-            <b-button variant="outline-danger" @click="file = null">Delete</b-button>
+            <b-button variant="outline-danger" @click="deleteFile()">Delete</b-button>
           </b-col>
         </b-form-row>
+        <b-alert show variant="danger" v-if="getFieldBackendError('image')">
+          {{getFieldBackendError('image').message}}
+        </b-alert>
         <b-form-text>Maximum file size: 2 MB</b-form-text>
       </b-form-group>
 
@@ -140,6 +143,10 @@ export default {
       this.file = null;
       this.$v.$reset();
     },
+    deleteFile() {
+      this.file = null;
+      this.error = null;
+    },
     async register() {
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -150,7 +157,7 @@ export default {
       formData.append('user', JSON.stringify(this.user));
       try {
         await axios.post(
-          'http://fullstack.braininghub.com:4040/registration',
+          `${process.env.VUE_APP_API_ENDPOINT}/registration`,
           formData,
           {
             headers: {
@@ -158,7 +165,7 @@ export default {
             },
           },
         );
-        this.$router.push('/signin');
+        this.$router.push('/signin?success=true');
       } catch (err) {
         this.error = err.response.data;
       }
