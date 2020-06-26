@@ -80,7 +80,7 @@
       </b-form-group>
 
       <b-form-group label="Introduction (optional)">
-        <b-form-textarea rows="4" col="21" v-model="user.introduction"/>
+        <vue-editor rows="4" col="21" v-model="user.introduction" :editor-toolbar="customToolbar"/>
       </b-form-group>
       <div class="text-right">
         <b-button variant="outline-success" type="submit" class="mr-2">Register</b-button>
@@ -98,15 +98,25 @@ import {
   email,
   sameAs,
 } from 'vuelidate/lib/validators';
+import { VueEditor } from 'vue2-editor';
 import UserDto from '../dtos/UserDto';
 
 export default {
   name: 'Registration',
+  components: { VueEditor },
   data: () => ({
     user: new UserDto(),
     repeatPassword: '',
     file: null,
     error: null,
+    customToolbar: [
+      [{ font: [] }],
+      ['bold', 'italic', 'underline'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
+      ['blockquote', 'code-block'],
+      ['clean'],
+    ],
   }),
   validations: {
     user: {

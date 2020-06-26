@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import Vuelidate from 'vuelidate';
+import { VueEditor } from 'vue2-editor';
 
 import App from './App.vue';
 import router from './router';
@@ -14,6 +15,7 @@ Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Vuelidate);
+Vue.use(VueEditor);
 
 new Vue({
   router,
