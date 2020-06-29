@@ -1,11 +1,10 @@
 <template>
   <div>
     <h1>Profile</h1>
-    <b-card
-      class="mb-3">
+    <b-card class="mb-3">
       <template v-slot:header>
         <b-icon-pencil-square class="mr-2" />
-        {{user.nickname}} <br>
+        {{user.nickname}}<br>
         <b-icon-envelope class="mr-2" />
         {{user.email}}
       </template>
@@ -14,8 +13,7 @@
           <b-card-img :src="avatar" style="max-width: 200px;"/>
         </b-col>
         <b-col cols="8">
-          <b-card-text v-html="user.introduction">
-          </b-card-text>
+          <b-card-text v-html="user.introduction" />
         </b-col>
       </b-row>
     </b-card>
@@ -33,7 +31,7 @@ export default {
       if (state.auth.user.avatar) {
         return `${process.env.VUE_APP_API_ENDPOINT}/images/${state.auth.user.avatar}`;
       }
-      return '../assets/2.jpeg';
+      return '/default.jpg';
     },
   }),
 };
