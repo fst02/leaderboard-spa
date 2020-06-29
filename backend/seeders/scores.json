@@ -1,0 +1,62 @@
+[
+  {
+    "userId": 7,
+    "gameId": 1,
+    "maxPoints": 100,
+    "numberOfRounds": 20
+  },
+  {
+    "userId": 1,
+    "gameId": 2,
+    "maxPoints": 10,
+    "numberOfRounds": 200
+  },
+  {
+    "userId": 2,
+    "gameId": 3,
+    "maxPoints": 13,
+    "numberOfRounds": 13
+  },
+  {
+    "userId": 2,
+    "gameId": 1,
+    "maxPoints": 420,
+    "numberOfRounds": 1
+  },
+  {
+    "userId": 3,
+    "gameId": 3,
+    "maxPoints": 8,
+    "numberOfRounds": 42
+  },
+  {
+    "userId": 4,
+    "gameId": 2,
+    "maxPoints": 21,
+    "numberOfRounds": 13
+  },
+  {
+    "userId": 4,
+    "gameId": 1,
+    "maxPoints": 7,
+    "numberOfRounds": 1200
+  },
+  {
+    "userId": 5,
+    "gameId": 3,
+    "maxPoints": 42,
+    "numberOfRounds": 420
+  },
+  {
+    "userId": 6,
+    "gameId": 1,
+    "maxPoints": 100,
+    "numberOfRounds": 20
+  },
+  {
+    "userId": 7,
+    "gameId": 1,
+    "maxPoints": 100,
+    "numberOfRounds": 20
+  }
+]
