@@ -112,7 +112,6 @@ export default {
     file: null,
     error: null,
     customToolbar: [
-      [{ font: [] }],
       ['bold', 'italic', 'underline'],
       [{ list: 'ordered' }, { list: 'bullet' }],
       [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
