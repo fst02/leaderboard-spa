@@ -3,6 +3,7 @@ const multer = require('multer');
 
 const RegistrationController = require('../controllers/RegistrationController');
 const SignInController = require('../controllers/SignInController');
+const ScoreController = require('../controllers/ScoreController');
 
 const upload = multer({
   dest: 'public/images',
@@ -11,9 +12,7 @@ const upload = multer({
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  res.render('index', { title: 'Express' });
-});
+router.get('/score/all', ScoreController.all);
 
 router.post('/registration', upload.single('file'), RegistrationController.register);
 
