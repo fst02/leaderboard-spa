@@ -17,3 +17,9 @@ export default {
   },
 };
 </script>
+
+<style>
+:focus {
+  outline: 0;
+}
+</style>

@@ -17,11 +17,13 @@
         </b-col>
       </b-row>
     </b-card>
+    <UserScoresComponent />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import UserScoresComponent from '../components/UserScoresComponent.vue';
 
 export default {
   name: 'Profile',
@@ -34,6 +36,9 @@ export default {
       return '/default.jpg';
     },
   }),
+  components: {
+    UserScoresComponent,
+  },
 };
 </script>
 
