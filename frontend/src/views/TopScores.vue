@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Top Scores</h1>
+    <b-form-select v-model="selectedGame" :options="options"></b-form-select>
     <b-table head-variant="dark"
     table-variant="light"
     striped :items="scores"
@@ -25,7 +26,14 @@ export default {
     this.$store.dispatch('score/getAll');
   },
   computed: mapState({
-    scores: (state) => state.score.scores,
+    scores(state) {
+      return state.score.scores.filter((row) => {
+        if (this.selectedGame) {
+          return row.game === this.selectedGame;
+        }
+        return true;
+      });
+    },
   }),
   data: () => ({
     sortBy: 'maxPoints',
@@ -36,6 +44,13 @@ export default {
       { key: 'game', label: 'Game', sortable: true },
       { key: 'maxPoints', label: 'Top Score', sortable: true },
       { key: 'numberOfRounds', label: 'Number of Rounds', sortable: true },
+    ],
+    selectedGame: '',
+    options: [
+      { value: '', text: 'All' },
+      { value: 'Hangman', text: 'Hangman' },
+      { value: 'Tetris', text: 'Tetris' },
+      { value: 'Mario', text: 'Mario' },
     ],
   }),
   components: {
