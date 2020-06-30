@@ -1,7 +1,14 @@
 <template>
   <div>
     <h1>Top Scores</h1>
-    <b-table :items="scores" :fields="fields">
+    <b-table head-variant="dark"
+    table-variant="light"
+    striped :items="scores"
+    :fields="fields"
+    :sort-by.sync="sortBy"
+    :sort-desc.sync="sortDesc"
+    responsive="sm"
+    >
       <template v-slot:cell(#)="scores">
         {{ scores.index + 1 }}
       </template>
@@ -21,12 +28,14 @@ export default {
     scores: (state) => state.score.scores,
   }),
   data: () => ({
+    sortBy: 'maxPoints',
+    sortDesc: true,
     fields: [
       '#',
-      { key: 'name', label: 'Nickname' },
-      { key: 'game', label: 'Game' },
-      { key: 'maxPoints', label: 'Top Score' },
-      { key: 'numberOfRounds', label: 'Number of Rounds' },
+      { key: 'name', label: 'Nickname', sortable: true },
+      { key: 'game', label: 'Game', sortable: true },
+      { key: 'maxPoints', label: 'Top Score', sortable: true },
+      { key: 'numberOfRounds', label: 'Number of Rounds', sortable: true },
     ],
   }),
   components: {
