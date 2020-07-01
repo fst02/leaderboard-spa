@@ -1,4 +1,6 @@
+const hasha = require('hasha');
 const User = require('../models/User');
+const { VerificationError } = require('./errors/VerificationError');
 
 const FileUploadService = require('../services/FileUploadService');
 
@@ -8,6 +10,9 @@ module.exports = {
       const filename = await FileUploadService.imageUpload(req.file);
       const userData = JSON.parse(req.body.user);
       const user = await User.findOne({ where: { id: req.params.userId } });
+      if (user.password !== hasha(userData.password)) {
+        throw new VerificationError('Invalid password');
+      }
       if (filename) {
         user.avatar = filename;
       }
@@ -15,7 +20,13 @@ module.exports = {
       user.save();
       res.json(user);
     } catch (err) {
-      res.status(500).json({ message: err.message, errors: err.errors });
+      if (err instanceof VerificationError) {
+        res.status(422).json({ error: err.toJSON() });
+      }
+      res.status(500).json({
+        error: err,
+        errors: err.errors,
+      });
     }
   },
 };

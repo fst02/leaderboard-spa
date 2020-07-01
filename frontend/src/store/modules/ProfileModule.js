@@ -35,8 +35,7 @@ export default {
         );
         context.commit('setUser', result.data);
       } catch (err) {
-        console.log(err);
-        context.commit('setError', err.response?.data || err);
+        context.commit('setError', err.response?.data.error || err);
       }
     },
   },

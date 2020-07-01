@@ -5,6 +5,9 @@
       Edit
     </b-button>
     <h1>Profile</h1>
+    <b-alert show variant="danger" v-if="error">
+      {{getFieldBackendError('image') || error.message}}
+    </b-alert>
     <b-card class="mb-3">
       <template v-slot:header>
         <b-icon-person-bounding-box class="mr-2" />
@@ -21,35 +24,54 @@
         </b-col>
       </b-row>
 
-      <b-row v-if="isEditing">
-        <b-col cols="4">
-          <b-form-group label="Image upload">
-            <b-form-file
-              v-model="file"
-              accept="image/*"
-              placeholder="Choose a file"
-              drop-placeholder="Drop file here..."
+      <div v-if="isEditing">
+        <b-row>
+          <b-col cols="4">
+            <b-form-group label="Image upload">
+              <b-form-file
+                v-model="file"
+                accept="image/*"
+                placeholder="Choose a file"
+                drop-placeholder="Drop file here..."
+              />
+              <b-form-text>Maximum file size: 2 MB</b-form-text>
+            </b-form-group>
+          </b-col>
+          <b-col cols="8">
+            <b-form-group label="Introduction">
+              <vue-editor
+                rows="4"
+                col="21"
+                v-model="user.introduction"
+                :editor-toolbar="customToolbar"
+              />
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-form-group label="Password">
+            <b-form-input
+              type="password"
+              v-model="password"
+              @input="$v.user.password.$touch()"
             />
-            <b-form-text>Maximum file size: 2 MB</b-form-text>
+            <b-alert show variant="danger" v-if="getFieldBackendError('password')">
+              {{getFieldBackendError('password').message}}
+            </b-alert>
+            <div v-if="$v.user.password.$dirty">
+              <b-alert show variant="danger" v-if="!$v.user.password.required">
+                Password is required
+              </b-alert>
+            </div>
           </b-form-group>
-        </b-col>
-        <b-col cols="8">
-          <b-form-group label="Introduction">
-            <vue-editor
-              rows="4"
-              col="21"
-              v-model="user.introduction"
-              :editor-toolbar="customToolbar"
-            />
-          </b-form-group>
-        </b-col>
-        <div class="text-right">
+        </b-row>
+        <b-row align-h="end">
           <b-button variant="outline-success" type="submit" @click="sendChanges()" class="mr-2">
             Save
           </b-button>
           <b-button variant="outline-danger" @click="setEditing(false)">Cancel</b-button>
-        </div>
-      </b-row>
+        </b-row>
+      </div>
 
     </b-card>
     <UserScoresComponent />
@@ -59,6 +81,7 @@
 <script>
 import { mapState } from 'vuex';
 import { VueEditor } from 'vue2-editor';
+import { required, minLength, sameAs } from 'vuelidate/lib/validators';
 import UserScoresComponent from '../components/UserScoresComponent.vue';
 
 export default {
@@ -67,6 +90,7 @@ export default {
     isEditing: false,
     file: null,
     error: null,
+    password: '',
     customToolbar: [
       ['bold', 'italic', 'underline'],
       [{ list: 'ordered' }, { list: 'bullet' }],
@@ -88,16 +112,38 @@ export default {
     UserScoresComponent,
     VueEditor,
   },
+  validations: {
+    user: {
+      password: { required, minLength: minLength(6) },
+    },
+    repeatPassword: {
+      required,
+      sameAsPassword: sameAs(function getPassword() { return this.user.password; }),
+    },
+  },
   methods: {
+    getFieldBackendError(field) {
+      const err = this.error?.errors?.find((error) => error.path === field);
+      if (err) {
+        return err.message;
+      }
+      return null;
+    },
     setEditing(status) {
       this.isEditing = status;
     },
-    sendChanges() {
+    async sendChanges() {
       this.isEditing = false;
       const formData = new FormData();
+      this.user.password = this.password;
       formData.append('file', this.file);
       formData.append('user', JSON.stringify(this.user));
-      this.$store.dispatch('profile/update', formData);
+      await this.$store.dispatch('profile/update', formData);
+      if (this.$store.state.profile.error) {
+        this.error = this.$store.state.profile.error;
+        this.file = null;
+        this.password = null;
+      }
     },
   },
 };
