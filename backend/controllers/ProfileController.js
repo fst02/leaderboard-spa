@@ -5,7 +5,6 @@ const FileUploadService = require('../services/FileUploadService');
 module.exports = {
   update: async (req, res) => {
     try {
-      console.log('backend');
       const filename = await FileUploadService.imageUpload(req.file);
       const userData = JSON.parse(req.body.user);
       const user = await User.findOne({ where: { id: req.params.userId } });

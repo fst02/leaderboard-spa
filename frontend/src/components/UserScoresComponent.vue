@@ -32,7 +32,7 @@ export default {
   }),
   computed: mapState({
     scores(state) {
-      return state.score.scores.filter((row) => row.name === state.auth.user.nickname);
+      return state.score.scores.filter((row) => row.name === state.profile.user.nickname);
     },
   }),
 };

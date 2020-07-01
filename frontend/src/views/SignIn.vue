@@ -46,7 +46,7 @@ import UserDto from '../dtos/UserDto';
 export default {
   name: 'SignIn',
   computed: mapState({
-    nickname: (state) => state.auth.user.nickname,
+    nickname: (state) => state.profile.user.nickname,
   }),
   data: () => ({
     user: new UserDto(),
@@ -61,7 +61,7 @@ export default {
         return;
       }
       await this.$store.dispatch('auth/login', this.user);
-      if (this.$store.state.auth.user) {
+      if (this.$store.state.profile.user) {
         this.$router.push('/');
       } else {
         this.error = this.$store.state.auth.error;

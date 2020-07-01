@@ -15,14 +15,17 @@ export default {
     setError(state, payload) {
       state.error = payload;
     },
+    deleteSessionData(state) {
+      state.user = null;
+      state.token = null;
+      state.error = null;
+    },
   },
   actions: {
     async update(context, data) {
       try {
-        console.log(data.user.id);
-        console.log(`/profile/update/${data.user.id}`);
         const result = await http(context).put(
-          `/profile/update/${data.user.id}`,
+          `/profile/update/${JSON.parse(data.get('user')).id}`,
           data,
           {
             headers: {
@@ -32,6 +35,7 @@ export default {
         );
         context.commit('setUser', result.data);
       } catch (err) {
+        console.log(err);
         context.commit('setError', err.response?.data || err);
       }
     },

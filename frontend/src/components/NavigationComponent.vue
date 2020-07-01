@@ -25,7 +25,7 @@ import { mapState } from 'vuex';
 export default {
   name: 'NavigationComponent',
   computed: mapState({
-    user: (state) => state.auth.user,
+    user: (state) => state.profile.user,
   }),
   methods: {
     logout() {

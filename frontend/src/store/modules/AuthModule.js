@@ -16,15 +16,6 @@ export default {
     setError(state, payload) {
       state.error = payload;
     },
-    deleteSessionData(state) {
-      state.user = null;
-      state.token = null;
-      state.error = null;
-    },
-    setUser(state, payload) {
-      state.user = payload;
-      state.error = null;
-    },
   },
   actions: {
     async verify(context, token) {
@@ -32,7 +23,7 @@ export default {
         const result = await http(context).get(
           `/registration/verify?token=${token}`,
         );
-        context.commit('setUser', result.data);
+        context.commit('profile/setUser', result.data, { root: true });
       } catch (err) {
         context.commit('setError', err.response?.data || err);
       }
@@ -41,13 +32,13 @@ export default {
       context.commit('deleteSessionData');
       try {
         const result = await http(context).post('/signin', user);
-        context.commit('setSessionData', result.data);
+        context.commit('profile/setUser', result.data.user, { root: true });
       } catch (err) {
         context.commit('setError', err.response?.data || err);
       }
     },
     logout(context) {
-      context.commit('deleteSessionData');
+      context.commit('profile/deleteSessionData', null, { root: true });
     },
   },
 };

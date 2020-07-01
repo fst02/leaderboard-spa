@@ -76,10 +76,10 @@ export default {
     ],
   }),
   computed: mapState({
-    user: (state) => state.auth.user,
+    user: (state) => state.profile.user,
     avatar: (state) => {
-      if (state.auth.user.avatar) {
-        return `${process.env.VUE_APP_API_ENDPOINT}/images/${state.auth.user.avatar}`;
+      if (state.profile.user.avatar) {
+        return `${process.env.VUE_APP_API_ENDPOINT}/images/${state.profile.user.avatar}`;
       }
       return '/default.jpg';
     },
@@ -93,12 +93,10 @@ export default {
       this.isEditing = status;
     },
     sendChanges() {
-      console.log('send');
       this.isEditing = false;
       const formData = new FormData();
       formData.append('file', this.file);
       formData.append('user', JSON.stringify(this.user));
-      console.log(formData);
       this.$store.dispatch('profile/update', formData);
     },
   },
