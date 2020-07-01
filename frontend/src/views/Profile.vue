@@ -49,18 +49,47 @@
           </b-col>
         </b-row>
         <b-row>
-          <b-form-group label="Password">
+          <b-form-group label="Current password">
             <b-form-input
               type="password"
               v-model="password"
-              @input="$v.user.password.$touch()"
+              @input="$v.password.$touch()"
             />
             <b-alert show variant="danger" v-if="getFieldBackendError('password')">
               {{getFieldBackendError('password').message}}
             </b-alert>
-            <div v-if="$v.user.password.$dirty">
-              <b-alert show variant="danger" v-if="!$v.user.password.required">
+            <div v-if="$v.password.$dirty">
+              <b-alert show variant="danger" v-if="!$v.password.required">
                 Password is required
+              </b-alert>
+            </div>
+          </b-form-group>
+
+          <b-form-group label="New password">
+            <b-form-input
+              type="password"
+              v-model="newPassword"
+              @input="$v.newPassword.$touch()"
+            />
+            <b-alert show variant="danger" v-if="getFieldBackendError('password')">
+              {{getFieldBackendError('password').message}}
+            </b-alert>
+            <div v-if="$v.newPassword.$dirty">
+              <b-alert show variant="danger" v-if="!$v.newPassword.minLength">
+                New password should be at least 6 characters long
+              </b-alert>
+            </div>
+          </b-form-group>
+
+          <b-form-group label="Repeat new password">
+            <b-form-input type="password" v-model="repeatPassword"
+              @input="$v.repeatPassword.$touch()" />
+            <div v-if="$v.repeatPassword.$dirty">
+              <b-alert show variant="danger" v-if="!$v.repeatPassword.requiredIf">
+                Repeat new password is required
+              </b-alert>
+              <b-alert show variant="danger" v-if="!$v.repeatPassword.sameAsPassword">
+                Should be same as new password
               </b-alert>
             </div>
           </b-form-group>
@@ -81,7 +110,12 @@
 <script>
 import { mapState } from 'vuex';
 import { VueEditor } from 'vue2-editor';
-import { required, minLength, sameAs } from 'vuelidate/lib/validators';
+import {
+  required,
+  minLength,
+  sameAs,
+  requiredIf,
+} from 'vuelidate/lib/validators';
 import UserScoresComponent from '../components/UserScoresComponent.vue';
 
 export default {
@@ -91,6 +125,8 @@ export default {
     file: null,
     error: null,
     password: '',
+    newPassword: '',
+    repeatPassword: '',
     customToolbar: [
       ['bold', 'italic', 'underline'],
       [{ list: 'ordered' }, { list: 'bullet' }],
@@ -113,12 +149,15 @@ export default {
     VueEditor,
   },
   validations: {
-    user: {
-      password: { required, minLength: minLength(6) },
+    password: {
+      required,
+    },
+    newPassword: {
+      minLength: minLength(6),
     },
     repeatPassword: {
-      required,
-      sameAsPassword: sameAs(function getPassword() { return this.user.password; }),
+      requiredIf: requiredIf(function hasNewPassword() { return this.$v.newPassword.$dirty; }),
+      sameAsPassword: sameAs(function getPassword() { return this.newPassword; }),
     },
   },
   methods: {
@@ -131,11 +170,17 @@ export default {
     },
     setEditing(status) {
       this.isEditing = status;
+      this.file = null;
+      this.password = '';
+      this.newPassword = '';
+      this.repeatPassword = '';
+      this.$v.$reset();
     },
     async sendChanges() {
       this.isEditing = false;
       const formData = new FormData();
       this.user.password = this.password;
+      this.user.newPassword = this.newPassword;
       formData.append('file', this.file);
       formData.append('user', JSON.stringify(this.user));
       await this.$store.dispatch('profile/update', formData);

@@ -8,19 +8,19 @@ const ProfileController = require('../controllers/ProfileController');
 
 const upload = multer({
   dest: 'public/images',
-  limits: { fileSize: 2 * 1024 * 1024 },
-});
+  limits: { fileSize: 2 * 1024 },
+}).single('file');
 
 const router = express.Router();
 
 router.get('/score/all', ScoreController.all);
 
-router.post('/registration', upload.single('file'), RegistrationController.register);
+router.post('/registration', upload, RegistrationController.register);
 
 router.get('/registration/verify', RegistrationController.verify);
 
 router.post('/signin', SignInController.signIn);
 
-router.put('/profile/update/:userId', upload.single('file'), ProfileController.update);
+router.put('/profile/update/:userId', upload, ProfileController.update);
 
 module.exports = router;

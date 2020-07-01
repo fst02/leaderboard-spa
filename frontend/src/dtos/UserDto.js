@@ -4,6 +4,7 @@ export default class UserDto {
       this.nickname = data.nickname;
       this.email = data.email;
       this.password = data.password;
+      this.newPassword = data.newPassword;
       this.introduction = data.introduction;
     }
   }

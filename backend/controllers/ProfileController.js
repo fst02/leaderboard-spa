@@ -1,15 +1,20 @@
 const hasha = require('hasha');
+const multer = require('multer');
 const User = require('../models/User');
 const { VerificationError } = require('./errors/VerificationError');
 
 const FileUploadService = require('../services/FileUploadService');
 
 module.exports = {
-  update: async (req, res) => {
+  update: async (req, res, err) => {
     try {
       const filename = await FileUploadService.imageUpload(req.file);
       const userData = JSON.parse(req.body.user);
       const user = await User.findOne({ where: { id: req.params.userId } });
+      if (err instanceof multer.MulterError) {
+        res.status(500).json(err);
+        return;
+      }
       if (user.password !== hasha(userData.password)) {
         throw new VerificationError('Invalid password');
       }
@@ -17,15 +22,18 @@ module.exports = {
         user.avatar = filename;
       }
       user.introduction = userData.introduction;
+      if (userData.newPassword) {
+        user.password = hasha(userData.newPassword);
+      }
       user.save();
       res.json(user);
-    } catch (err) {
-      if (err instanceof VerificationError) {
-        res.status(422).json({ error: err.toJSON() });
+    } catch (error) {
+      if (error instanceof VerificationError) {
+        res.status(422).json({ error: error.toJSON() });
       }
       res.status(500).json({
-        error: err,
-        errors: err.errors,
+        error,
+        errors: error.errors,
       });
     }
   },
